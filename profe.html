@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff7ec">
+  <title>Trazos · Panel de la profe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap">
+  <link rel="stylesheet" href="css/estilos.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✏️</text></svg>">
+</head>
+<body class="profe">
+  <div id="aviso-demo" class="aviso-demo" hidden>Modo demo: todo se guarda solo en este navegador. Para usarlo en clase con varios dispositivos, configura Supabase (LEEME.md).</div>
+
+  <!-- Login -->
+  <section id="v-login" class="vista centrada" hidden>
+    <div class="tarjeta">
+      <div class="logo">✏️ Trazos</div>
+      <h1>Panel de la profe</h1>
+      <form id="f-login">
+        <label>Email <input id="i-email" class="campo" type="email" autocomplete="username" required></label>
+        <label>Contraseña <input id="i-pass" class="campo" type="password" autocomplete="current-password" required></label>
+        <button class="btn btn-grande btn-verde" type="submit">Entrar</button>
+        <p id="e-login" class="error" role="alert"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- Inicio -->
+  <section id="v-inicio" class="vista centrada" hidden>
+    <div class="tarjeta">
+      <div class="logo">✏️ Trazos</div>
+      <h1>Panel de la profe</h1>
+      <div class="botones" style="flex-direction:column">
+        <button class="btn btn-grande btn-verde" id="b-crear">Crear sesión nueva</button>
+        <button class="btn btn-sec" id="b-continuar" hidden>Continuar la sesión abierta <strong id="t-continuar"></strong></button>
+      </div>
+      <p class="suave" style="margin-top:18px">Los alumnos entran desde <strong id="t-url-inicio"></strong></p>
+      <button class="btn btn-sec" id="b-salir" hidden style="margin-top:6px">Cerrar sesión</button>
+    </div>
+  </section>
+
+  <!-- Sesión en marcha -->
+  <section id="v-sesion" class="vista panel" hidden>
+    <header class="cabecera">
+      <div class="logo">✏️ Trazos</div>
+      <button class="codigo-chip" id="b-codigo" title="Mostrar en grande para proyectar">Código <strong id="t-codigo">----</strong> <span class="suave" style="color:#ccc;font-size:14px">proyectar</span></button>
+      <button class="chip" id="b-participantes">👧 <span id="t-num-part">0</span> conectados</button>
+      <span class="espacio"></span>
+      <button class="btn btn-sec" id="b-alumno-prueba" hidden>+ Alumno de prueba</button>
+      <button class="btn btn-peligro" id="b-terminar">Terminar sesión</button>
+    </header>
+
+    <section class="control">
+      <div id="c-nueva">
+        <label class="etiqueta" for="i-consigna">¿Qué tienen que dibujar? <span class="suave">(opcional: también puedes decirlo en voz alta)</span></label>
+        <div class="fila">
+          <input id="i-consigna" class="campo" maxlength="300" placeholder="Ej.: Dibuja un gato debajo de una mesa" autocomplete="off">
+          <select id="i-idioma" class="sel" title="Idioma del dictado">
+            <option value="es-ES">ES</option>
+            <option value="ca-ES">VAL</option>
+            <option value="en-GB">EN</option>
+            <option value="fr-FR">FR</option>
+          </select>
+          <button class="herr btn-micro" id="b-micro" title="Dictar con el micrófono" aria-label="Dictar">🎤</button>
+        </div>
+        <div class="fila opciones">
+          <label class="check"><input type="checkbox" id="i-mostrar" checked> Mostrar la frase en sus pantallas</label>
+          <label class="en-linea">⏱ Tiempo
+            <select id="i-tiempo" class="sel">
+              <option value="0">Sin límite</option>
+              <option value="30">30 s</option>
+              <option value="60">1 min</option>
+              <option value="90">1 min 30 s</option>
+              <option value="120">2 min</option>
+              <option value="180">3 min</option>
+              <option value="300">5 min</option>
+            </select>
+          </label>
+          <span class="espacio"></span>
+          <button class="btn btn-grande btn-verde" id="b-lanzar">Lanzar ronda 1</button>
+        </div>
+      </div>
+
+      <div id="c-abierta" hidden>
+        <div class="fila">
+          <span class="chip chip-vivo">Ronda <span id="t-num-ronda"></span> abierta</span>
+          <p class="consigna-profe" id="t-consigna-profe"></p>
+          <span class="cuenta" id="t-cuenta" hidden></span>
+          <span class="espacio"></span>
+          <strong class="progreso" id="t-progreso">0 / 0 enviados</strong>
+          <button class="btn btn-naranja" id="b-recoger" title="Cuenta atrás de 5 segundos y se envían todos los dibujos">Recoger dibujos</button>
+        </div>
+        <div class="estado-alumnos" id="l-estado-alumnos"></div>
+      </div>
+    </section>
+
+    <nav class="pestanas" id="pestanas"></nav>
+    <div class="barra-galeria">
+      <h2 id="t-galeria">Dibujos</h2>
+      <span class="espacio"></span>
+      <button class="btn btn-sec" id="b-zip-ronda">⬇ Descargar esta ronda</button>
+      <button class="btn btn-sec" id="b-zip-todo">⬇ Descargar todo</button>
+    </div>
+    <div class="galeria" id="galeria"></div>
+    <p class="vacio" id="galeria-vacia">Lanza una ronda y aquí irán apareciendo los dibujos.</p>
+  </section>
+
+  <!-- Código en grande (para proyectar) -->
+  <div id="m-codigo" class="modal modal-proyector" hidden>
+    <div class="caja">
+      <p class="grande">Entra en la web y escribe el código:</p>
+      <div class="codigo-enorme" id="t-codigo-grande"></div>
+      <img id="img-qr" class="qr" alt="Código QR para entrar" hidden>
+      <p class="url" id="t-url"></p>
+      <div class="botones">
+        <button class="btn btn-sec" id="b-copiar">Copiar enlace</button>
+        <button class="btn btn-verde" id="b-codigo-cerrar">Listo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Visor de dibujos -->
+  <div id="m-visor" class="modal visor" hidden>
+    <span class="contador" id="t-visor-contador"></span>
+    <div class="arriba">
+      <button class="btn btn-sec" id="b-visor-full">Pantalla completa</button>
+      <button class="btn btn-sec" id="b-visor-cerrar">✕ Cerrar</button>
+    </div>
+    <button class="nav prev" id="b-visor-prev" aria-label="Anterior">‹</button>
+    <figure><img id="img-visor" alt=""><figcaption id="t-visor-nombre"></figcaption></figure>
+    <button class="nav next" id="b-visor-next" aria-label="Siguiente">›</button>
+  </div>
+
+  <!-- Participantes -->
+  <div id="m-participantes" class="modal" hidden>
+    <div class="caja">
+      <h2>Alumnos conectados</h2>
+      <ul class="lista-part" id="l-participantes"></ul>
+      <div class="botones"><button class="btn btn-verde" id="b-part-cerrar">Cerrar</button></div>
+    </div>
+  </div>
+
+  <!-- Confirmación genérica -->
+  <div id="m-confirmar" class="modal" hidden>
+    <div class="caja">
+      <h2 id="t-confirmar-titulo"></h2>
+      <p id="t-confirmar-texto"></p>
+      <div class="botones" id="c-confirmar-botones"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+  <script type="module" src="js/profe.js"></script>
+</body>
+</html>

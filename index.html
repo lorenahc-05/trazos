@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#fff7ec">
+  <title>Trazos · ¡A dibujar!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap">
+  <link rel="stylesheet" href="css/estilos.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✏️</text></svg>">
+</head>
+<body class="alumno">
+  <div id="aviso-demo" class="aviso-demo" hidden>Modo demo · solo funciona en este navegador</div>
+
+  <!-- 1. Entrar -->
+  <section id="v-unirse" class="vista centrada" hidden>
+    <div class="tarjeta">
+      <div class="logo">✏️ Trazos</div>
+      <h1>¡Vamos a dibujar!</h1>
+      <form id="f-unirse" novalidate>
+        <label>Código de la clase
+          <input id="i-codigo" class="campo codigo" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="····">
+        </label>
+        <label>Tu nombre
+          <input id="i-nombre" class="campo" maxlength="30" autocomplete="off" placeholder="Escribe tu nombre">
+        </label>
+        <button class="btn btn-grande btn-verde" type="submit" id="b-entrar">¡Entrar!</button>
+        <p id="e-unirse" class="error" role="alert"></p>
+      </form>
+    </div>
+    <a class="enlace-profe" href="profe.html">Soy la profe</a>
+  </section>
+
+  <!-- 2. Esperando ronda -->
+  <section id="v-espera" class="vista centrada" hidden>
+    <div class="tarjeta">
+      <div class="lapiz-animado">✏️</div>
+      <h1>Hola, <span class="t-nombre"></span></h1>
+      <p class="grande">Espera a que la profe diga qué hay que dibujar…</p>
+    </div>
+  </section>
+
+  <!-- 3. Dibujando -->
+  <section id="v-dibujar" class="vista dibujar" hidden>
+    <header class="barra-consigna">
+      <span class="chip" id="t-ronda">Ronda 1</span>
+      <p id="t-consigna" class="consigna"></p>
+      <span class="cuenta" id="t-cuenta" hidden></span>
+    </header>
+    <div class="zona-lienzo" id="zona-lienzo">
+      <canvas id="lienzo" width="1200" height="900" aria-label="Lienzo de dibujo"></canvas>
+    </div>
+    <footer class="herramientas">
+      <div class="grupo" id="colores" aria-label="Colores"></div>
+      <div class="grupo" id="grosores" aria-label="Grosor"></div>
+      <div class="grupo">
+        <button class="herr" id="b-goma" title="Goma" aria-label="Goma">🧽</button>
+        <button class="herr" id="b-deshacer" title="Deshacer" aria-label="Deshacer">↩️</button>
+        <button class="herr" id="b-borrar" title="Borrar todo" aria-label="Borrar todo">🗑️</button>
+      </div>
+      <button class="btn btn-verde btn-enviar" id="b-enviar">Enviar ✓</button>
+    </footer>
+  </section>
+
+  <!-- 4. Enviado -->
+  <section id="v-enviado" class="vista centrada" hidden>
+    <div class="tarjeta">
+      <div class="emoji-grande">🎉</div>
+      <h1>¡Dibujo enviado!</h1>
+      <img id="img-enviado" class="img-enviado" alt="Tu dibujo" hidden>
+      <p class="grande" id="t-enviado-espera">Espera a la siguiente ronda…</p>
+      <div class="botones"><button class="btn btn-sec" id="b-cambiar">✏️ Quiero cambiarlo</button></div>
+    </div>
+  </section>
+
+  <!-- 5. Ronda cerrada sin enviar -->
+  <section id="v-cerrada" class="vista centrada" hidden>
+    <div class="tarjeta">
+      <div class="emoji-grande">⏰</div>
+      <h1>Se acabó el tiempo</h1>
+      <p class="grande">Espera a la siguiente ronda…</p>
+    </div>
+  </section>
+
+  <!-- 6. Fin -->
+  <section id="v-fin" class="vista centrada" hidden>
+    <div class="tarjeta">
+      <div class="emoji-grande">👋</div>
+      <h1>¡La clase ha terminado!</h1>
+      <p class="grande">¡Muy bien hecho!</p>
+      <div class="botones"><button class="btn btn-sec" id="b-otra">Entrar en otra clase</button></div>
+    </div>
+  </section>
+
+  <div id="m-borrar" class="modal" hidden>
+    <div class="caja">
+      <h2>¿Borrar todo el dibujo?</h2>
+      <div class="botones">
+        <button class="btn btn-sec" id="b-borrar-no">No</button>
+        <button class="btn btn-peligro" id="b-borrar-si">Sí, borrar</button>
+      </div>
+    </div>
+  </div>
+  <div id="toast" class="toast" hidden></div>
+
+  <script type="module" src="js/alumno.js"></script>
+</body>
+</html>
